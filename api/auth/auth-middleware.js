@@ -6,8 +6,10 @@
     "message": "You shall not pass!"
   }
 */
-function restricted() {
-
+function restricted(req, res, next) {
+  if (req.session && req.session.) {
+    console.log('restricted')
+  }
 }
 
 /*
