@@ -1,38 +1,25 @@
 const router = require('express').Router();
+const User = require('../users/users-model');
+const bcrypt = require('bcryptjs');
 const {
   checkPasswordLength,
   checkUsernameExists,
   checkUsernameFree,
 } = require('./auth-middleware');
 
-/**
-  1 [POST] /api/auth/register { "username": "sue", "password": "1234" }
-
-  response:
-  status 200
-  {
-    "user_id": 2,
-    "username": "sue"
-  }
-
-  response on username taken:
-  status 422
-  {
-    "message": "Username taken"
-  }
-
-  response on password three chars or less:
-  status 422
-  {
-    "message": "Password must be longer than 3 chars"
-  }
- */
 router.post(
   '/register',
   checkPasswordLength,
   checkUsernameFree,
   (req, res, next) => {
-    res.json('register');
+    const { username, password } = req.body;
+    const hash = bcrypt.hashSync(password, 8); // 2 ^ 8
+
+    User.add({ username, password: hash })
+      .then((saved) => {
+        res.status(201).json(saved);
+      })
+      .catch(next);
   }
 );
 
