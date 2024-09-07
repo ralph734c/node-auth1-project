@@ -7,7 +7,7 @@
   }
 */
 function restricted(req, res, next) {
-  if (req.session && req.session.) {
+  if (req.session && req.session.userId) {
     console.log('restricted')
   }
 }
